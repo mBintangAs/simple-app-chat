@@ -29,7 +29,7 @@ const JwtSign = async (data) => {
     try {
         return jwt.sign({
             data: data
-        }, process.env.JWT_SECRET, { expiresIn: 60 * 60 });
+        }, process.env.JWT_SECRET, { expiresIn: 30 * 60 });
     } catch (error) {
         return error
     }

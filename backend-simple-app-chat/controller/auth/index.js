@@ -10,15 +10,15 @@ const index = async (req, res) => {
         const { username, password } = req.body
         const user = await User.findOne({ username })
         if (!user) {
-            throw Error('Username tidak di temukan')
+            return res.status(500).json('Username tidak di temukan')
         }
         if (await ComparePasswords(password, user.password)) {
             const token = await JwtSign(user)
-            return res.json(token)
+            return res.json({ _id: user._id, username ,token })
         }
-        throw Error('Username / Password salah')
+        return res.status(500).json('Username / Password salah')
     } catch (error) {
-        return res.status(500).json(error)
+        return res.status(500).json({ error })
     }
 }
 const store = async (req, res) => {
@@ -29,7 +29,7 @@ const store = async (req, res) => {
             return res.status(400).json(result.errors);
         }
         const user = await User.create({ username, password: await HashPassword(password) })
-        return res.json(await JwtSign(user))
+        return res.json(user.username)
     } catch (error) {
         console.log(error);
         return res.json(error).status(500)

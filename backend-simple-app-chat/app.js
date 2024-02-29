@@ -5,14 +5,38 @@ const { router: ChatRoute } = require('./route/chat')
 const { router: AuthRoute } = require('./route/auth')
 const { main } = require('./model')
 const bodyParser = require('body-parser')
-const { HashPassword } = require('./utils/auth')
+const { router: MessageRouter } = require('./route/message')
+const { Server } = require('socket.io');
+const { createServer } = require('node:http');
+const cors = require('cors');
+
+app.use(cors());
 
 main().then(() => { console.log('success conected') }).catch(err => console.log(err));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(AuthRoute)
 app.use(ChatRoute)
-app.listen(process.env.APP_PORT, () => {
+app.use(MessageRouter)
+
+
+const server = createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3001"
+    }
+});
+io.on('connection', (socket) => {
+    console.log(socket);
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+});
+server.listen(process.env.APP_PORT, () => {
     console.log(`${process.env.APP_NAME} listening on port ${process.env.APP_PORT}`)
 })
+// app.listen(process.env.APP_PORT, () => {
+//     console.log(`${process.env.APP_NAME} listening on port ${process.env.APP_PORT}`)
+// })
 

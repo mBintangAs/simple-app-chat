@@ -1,7 +1,7 @@
 const express = require('express')
-const { index, store } = require('../../controller/chat')
+const { index, store } = require('../../controller/message')
 const { AuthVerify } = require('../../middleware/auth')
 const router = express.Router()
-router.get('/chat', AuthVerify, index)
-router.post('/chat', AuthVerify, store)
+router.get('/message', AuthVerify, index)
+router.post('/message', AuthVerify, store)
 module.exports = { router }
