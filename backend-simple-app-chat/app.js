@@ -23,20 +23,14 @@ app.use(MessageRouter)
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3001"
+        origin: "*"
     }
 });
-io.on('connection', (socket) => {
-    console.log(socket);
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-});
+
+app.set('io', io);
+
 server.listen(process.env.APP_PORT, () => {
     console.log(`${process.env.APP_NAME} listening on port ${process.env.APP_PORT}`)
 })
-// app.listen(process.env.APP_PORT, () => {
-//     console.log(`${process.env.APP_NAME} listening on port ${process.env.APP_PORT}`)
-// })
+
 

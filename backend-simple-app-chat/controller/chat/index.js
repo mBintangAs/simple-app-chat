@@ -32,17 +32,33 @@ const store = async (req, res) => {
         const { _id } = req.user;
         const { username } = req.body;
         const user = await User.findOne({ username })
-        if (user.length < 1 || user._id == _id) {
+        
+        if (!user) {
             return res.json({ code: 404, message: 'Pengguna tidak ditemukan' })
         }
-        const chatExist = await Chat.findOne({ participants: { $in: [_id, user._id] } })
-        if (chatExist) {
-            return res.json(chatExist._id)
-        }
+        // const chatExist = await Chat.findOne({ participants: { $in: [_id, user._id] } })
+        // if (chatExist) {
+        //     return res.json(chatExist._id)
+        // }
         const chat = await Chat.create({ participants: [_id, user._id] })
+       
         return res.json(chat._id)
     } catch (error) {
+        console.log(error);
         return res.status(500).json(error)
     }
 }
-module.exports = { index, store }    
+const show = async (req, res) => {
+    try {
+        const { id } = req.params
+        const chat = await Chat.findOne({ _id: id }).populate({
+            path: "message",
+            options: { strictPopulate: false }
+        })
+        return res.json(chat)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(error)
+    }
+}
+module.exports = { index, store, show }    

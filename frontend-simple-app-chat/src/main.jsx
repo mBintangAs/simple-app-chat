@@ -32,9 +32,9 @@ const router = createBrowserRouter([
   { errorElement: <Error /> }
 ]);
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <ChakraProvider>
       <RouterProvider router={router} />
     </ChakraProvider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )

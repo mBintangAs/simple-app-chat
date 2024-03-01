@@ -29,16 +29,17 @@ export const StartChat = ({ isOpen, onClose, loadChat }) => {
         }),
         onSubmit: async (value) => {
             try {
+                formik.errors.username=''
                 const { username } = value
-                console.log(value);
                 const headers = { authorization: localStorage.getItem('key') }
                 const { data } = await axios.post('/chat', { username }, { headers });
                 console.log(data);
                 if (data?.code == 404) {
-                    formik.errors.username = data.message
+                    return formik.errors.username = data.message
                 }
                 loadChat()
                 onClose()
+                
             } catch (error) {
                 console.log(error);
             }

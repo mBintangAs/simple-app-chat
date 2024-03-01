@@ -20,9 +20,11 @@ import { io } from 'socket.io-client';
 
 export const Chat = () => {
     const [chat, setChat] = useState([])
+    const [idPesan,setIdPesan] =useState()
+    const [reciveName,setReciveName] =useState()
+
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const socket = io('http://localhost:3001');
     const loadChat = async () => {
         try {
             const headers = { authorization: localStorage.getItem('key') }
@@ -35,12 +37,13 @@ export const Chat = () => {
             console.log(error);
         }
     }
+   
     useEffect(() => {
         loadChat()
-        socket.on('connection', (msg) => {
-            console.log('Pesan baru diterima:', msg);
-            // Lakukan logika untuk menangani pesan di sini
-          });
+        // socket.on('connection', (msg) => {
+        //     console.log('Pesan baru diterima:', msg);
+        //     // Lakukan logika untuk menangani pesan di sini
+        //   });
     }, [])
     return (
         <>
@@ -54,7 +57,7 @@ export const Chat = () => {
                     </Flex>
                     {chat?.length > 0 ?
                         chat.map((value) =>
-                            <ListChat value={value} />
+                            <ListChat key={value._id} setReciveName={setReciveName} setIdPesan={setIdPesan} value={value} />
                         )
                         :
                         <Center>Belum ada percakapan</Center>
@@ -62,7 +65,7 @@ export const Chat = () => {
 
                 </Box>
                 <Divider orientation='vertical'></Divider>
-                <ChatDetail/>
+                <ChatDetail _id={idPesan} name={reciveName}/>
             </HStack>
             <StartChat isOpen={isOpen} onClose={onClose} loadChat={loadChat} />
         </>
