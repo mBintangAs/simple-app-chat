@@ -40,11 +40,9 @@ export const Chat = () => {
    
     useEffect(() => {
         loadChat()
-        // socket.on('connection', (msg) => {
-        //     console.log('Pesan baru diterima:', msg);
-        //     // Lakukan logika untuk menangani pesan di sini
-        //   });
+       
     }, [])
+    
     return (
         <>
             <HStack h={'100vh'} spacing={5}>
@@ -57,7 +55,7 @@ export const Chat = () => {
                     </Flex>
                     {chat?.length > 0 ?
                         chat.map((value) =>
-                            <ListChat key={value._id} setReciveName={setReciveName} setIdPesan={setIdPesan} value={value} />
+                            <ListChat key={value._id} setReciveName={setReciveName} setIdPesan={setIdPesan} value={value} loadChat={loadChat} />
                         )
                         :
                         <Center>Belum ada percakapan</Center>
@@ -65,7 +63,7 @@ export const Chat = () => {
 
                 </Box>
                 <Divider orientation='vertical'></Divider>
-                <ChatDetail _id={idPesan} name={reciveName}/>
+                <ChatDetail _id={idPesan}  name={reciveName}/>
             </HStack>
             <StartChat isOpen={isOpen} onClose={onClose} loadChat={loadChat} />
         </>

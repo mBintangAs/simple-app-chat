@@ -6,19 +6,25 @@ import { Text } from '@chakra-ui/react'
 import { Divider } from '@chakra-ui/react'
 import { useState } from 'react';
 import { useEffect } from 'react';
+import axios from 'axios';
+import { io } from 'socket.io-client';
 
-export const ListChat = ({ value,setReciveName,setIdPesan }) => {
+export const ListChat = ({ value, setReciveName, setIdPesan, loadChat }) => {
+    const socket = io(axios.defaults.baseURL, { transports: ['websocket'], });
 
-    const [name ,setName] = useState()
+    const [name, setName] = useState()
     const openChat = (event) => {
         try {
             setIdPesan(value._id)
             setReciveName(name)
         } catch (error) {
-            
+
         }
     }
-    useEffect(()=>setName(value.participants.filter((value) => value._id != localStorage.getItem('_id'))[0]?.username),[])
+    socket.on(value._id, (msg) => {
+        loadChat()
+    });
+    useEffect(() => setName(value.participants.filter((value) => value._id != localStorage.getItem('_id'))[0]?.username), [])
     return (
         <Flex cursor={'pointer'} px={5} mb={5} as={'div'} onClick={openChat} key={value._id} columnGap={5} >
             <FaUserCircle fontSize={48} />

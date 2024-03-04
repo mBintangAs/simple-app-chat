@@ -27,19 +27,19 @@ export const StartChat = ({ isOpen, onClose, loadChat }) => {
         validationSchema: Yup.object({
             username: Yup.string().required('Username perlu diisi'),
         }),
-        onSubmit: async (value) => {
+        onSubmit: async (value, { setErrors, resetForm }) => {
             try {
-                formik.errors.username=''
+                resetForm()
                 const { username } = value
                 const headers = { authorization: localStorage.getItem('key') }
                 const { data } = await axios.post('/chat', { username }, { headers });
                 console.log(data);
-                if (data?.code == 404) {
-                    return formik.errors.username = data.message
+                if (data?.code === 404) {
+                    setErrors({ username: data.message });
+                    return;
                 }
                 loadChat()
                 onClose()
-                
             } catch (error) {
                 console.log(error);
             }
