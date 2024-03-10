@@ -14,7 +14,6 @@ import { Button } from '@chakra-ui/react'
 import { StartChat } from '../partials/StartChat';
 import axios from 'axios';
 import { ChatDetail } from '../partials/ChatDetail';
-import { io } from 'socket.io-client';
 
 
 
@@ -46,7 +45,7 @@ export const Chat = () => {
     return (
         <>
             <HStack h={'100vh'} spacing={5}>
-                <Box w={'lg'} h={'100vh'} overflowY={'scroll'}   >
+                <Box w={{ base:'full',sm:'50%',lg:'30%' }}  h={'100vh'} overflowY={'scroll'}   >
                     <Flex justifyContent={'space-between'} p={5} mb={5} fontSize={24} >
                         <Heading as='h1' noOfLines={1}>Simple App Chat</Heading>
                         <Button colorScheme='teal' onClick={onOpen} variant='solid' >

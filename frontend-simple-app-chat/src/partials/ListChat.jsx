@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import moment from 'moment'
 
 export const ListChat = ({ value, setReciveName, setIdPesan, loadChat }) => {
     const socket = io(axios.defaults.baseURL, { transports: ['websocket'], });
@@ -30,7 +31,11 @@ export const ListChat = ({ value, setReciveName, setIdPesan, loadChat }) => {
             <FaUserCircle fontSize={48} />
             <VStack align='start' w={'full'} spacing={1}>
                 <Heading as='h6' fontSize={24} >{name}</Heading>
-                <Text fontSize={12} noOfLines={1} >{value.lastMessageId?.text}</Text>
+                <Flex justifyContent={'space-between'} w={'full'}>
+                    <Text fontSize={12} w={'90%'} noOfLines={1} >{value.lastMessageId?.text}</Text>
+                    <Text fontSize={12} noOfLines={1} >{moment(value.lastMessageId?.createdAt).format('HH:mm')}</Text>
+                    
+                </Flex>
                 <Divider colorScheme='teal' ></Divider>
             </VStack>
         </Flex>

@@ -23,7 +23,7 @@ app.use(MessageRouter)
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*"
+        origin: "http://localhost:5173"
     }
 });
 

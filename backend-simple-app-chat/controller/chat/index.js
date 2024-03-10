@@ -14,7 +14,7 @@ const index = async (req, res) => {
                 },
                 {
                     path: "lastMessageId",
-                    select: "text", // Jika Anda hanya ingin menampilkan username dari participants
+                    select: "text createdAt", // Jika Anda hanya ingin menampilkan username dari participants
                     options: { strictPopulate: false }
                 }
             ]
@@ -26,7 +26,7 @@ const index = async (req, res) => {
         return res.status(500).json(error)
     }
 
-    
+
 }
 const store = async (req, res) => {
     try {
@@ -39,10 +39,17 @@ const store = async (req, res) => {
         if (!user) {
             return res.json({ code: 404, message: 'Pengguna tidak ditemukan' })
         }
-        const chatExist = await Chat.findOne({ participants: { $in: [_id, user._id] } })
+        const chatExist = await Chat.findOne({
+            $and: [
+                { participants: { $in: [_id] } }, // Cek apakah _id pertama ada di dalam array participants
+                { participants: { $in: [user._id] } } // Cek apakah _id kedua ada di dalam array participants
+            ]
+        });
+
         if (chatExist) {
-            return res.json({ code: 404, message: 'Pengguna sudah ditambahkan' })
+            return res.json({ code: 404, message: 'Pengguna sudah ditambahkan' });
         }
+
         const chat = await Chat.create({ participants: [_id, user._id] })
 
         return res.json(chat._id)
@@ -58,6 +65,7 @@ const show = async (req, res) => {
             path: "message",
             options: { strictPopulate: false }
         })
+       
         return res.json(chat)
     } catch (error) {
         console.log(error);

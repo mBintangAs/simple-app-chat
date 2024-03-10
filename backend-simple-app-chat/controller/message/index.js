@@ -1,4 +1,3 @@
-const { io } = require("../../app");
 const { Chat } = require("../../model/Chat");
 const { Message } = require("../../model/Message");
 
