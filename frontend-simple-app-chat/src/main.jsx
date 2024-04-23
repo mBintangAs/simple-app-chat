@@ -13,7 +13,7 @@ import { Login } from './pages/Login';
 import axios from 'axios';
 import { Chat } from './pages/Chat';
 
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = 'https://api-chat.assp.my.id';
 const router = createBrowserRouter([
   {
     path: "/register",
